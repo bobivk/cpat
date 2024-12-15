@@ -32,7 +32,7 @@ public class Company {
     @CollectionTable(name = "company_metrics", joinColumns = @JoinColumn(name = "company_id"))
     @MapKeyColumn(name = "metric_name")
     @Column(name = "metric_value")
-    private Map<String, Double> metrics;
+    private Map<String, String> metrics;
 
 }
 
