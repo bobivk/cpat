@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.util.Map;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.fast.cpat")
 public class CpatApplication {
 
 	public static void main(String[] args) {
