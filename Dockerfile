@@ -9,7 +9,5 @@ EXPOSE 8080
 # Copy the JAR file from the build context into the Docker image
 COPY ${JAR_FILE} application.jar
 
-CMD apt-get update -y
-
 # Set the default command to run the Java application
 ENTRYPOINT ["java", "-jar", "/application.jar"]
