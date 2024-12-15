@@ -1,0 +1,13 @@
+package com.fast.cpat;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class CpatApplicationTests {
+
+	@Test
+	void contextLoads() {
+	}
+
+}
