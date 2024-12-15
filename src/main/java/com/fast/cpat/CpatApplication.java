@@ -18,6 +18,9 @@ public class CpatApplication {
 	}
 	@Bean
 	CommandLineRunner runner(CompanyRepository companyRepository) {
-		return args -> companyRepository.save(Company.builder().name("new company").metrics(Map.of("Market cap", "$1B")).build());
+		return args -> {
+			Company company = Company.builder().name("new company").metrics(Map.of("Market cap", "$1B")).build();
+			companyRepository.save(company);
+		};
 	}
 }
