@@ -16,13 +16,13 @@ public class CompanyServiceImpl implements CompanyService {
         return companyRepository.save(company);
     }
 
-    public Company updateCompany(String companyId, Company company) {
+    public Company updateCompany(Long companyId, Company company) {
         checkCompanyExists(companyId);
         company.setId(companyId);
         return companyRepository.save(company);
     }
 
-    public Analysis analyze(String companyId) {
+    public Analysis analyze(Long companyId) {
         checkCompanyExists(companyId);
         // call openAI API to generate questions
         // call openAI API to generate a summary analysis based on industry and KPIs
@@ -30,12 +30,12 @@ public class CompanyServiceImpl implements CompanyService {
         return new Analysis();
     }
 
-    public void deleteCompany(String companyId) {
+    public void deleteCompany(Long companyId) {
         checkCompanyExists(companyId);
         companyRepository.deleteById(companyId);
     }
 
-    private void checkCompanyExists(String companyId) {
+    private void checkCompanyExists(Long companyId) {
         if (!companyRepository.existsById(companyId)) {
             throw new IllegalArgumentException("Company not found");
         }

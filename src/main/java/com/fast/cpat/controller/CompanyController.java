@@ -27,19 +27,19 @@ public class CompanyController {
     }
 
     @PostMapping("/company/{companyId}")
-    public ResponseEntity<Company> updateCompany(@PathVariable String companyId, @RequestBody Company company) {
+    public ResponseEntity<Company> updateCompany(@PathVariable Long companyId, @RequestBody Company company) {
         Company updatedCompany = companyService.updateCompany(companyId, company);
         return ResponseEntity.ok(updatedCompany);
     }
 
     @GetMapping("/analysis/{companyId}")
-    public ResponseEntity<Analysis> analyzeCompany(@PathVariable String companyId) {
+    public ResponseEntity<Analysis> analyzeCompany(@PathVariable Long companyId) {
         Analysis analysis = companyService.analyze(companyId);
         return ResponseEntity.ok(analysis);
     }
 
     @DeleteMapping("/company/{companyId}")
-    public ResponseEntity<Void> deleteCompany(@PathVariable String companyId) {
+    public ResponseEntity<Void> deleteCompany(@PathVariable Long companyId) {
         companyService.deleteCompany(companyId);
         return ResponseEntity.noContent().build();
     }
