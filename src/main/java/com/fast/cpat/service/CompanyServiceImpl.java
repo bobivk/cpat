@@ -53,7 +53,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     public Analysis getQuestions(Company company) {
         checkCompanyExists(company.getId());
-        String prompt = getResource("LLM_questions_prompt.txt");
+        String prompt = this.secretsService.getSecret("LLM_questions_prompt");
 
         String response = callOpenAIAPI(prompt, company.getIndustry());
         return new Analysis(company.getId(), response);
@@ -62,25 +62,11 @@ public class CompanyServiceImpl implements CompanyService {
     public Analysis getSummary(Company company) {
         checkCompanyExists(company.getId());
 
-        String prompt = getResource("LLM_summary_prompt.txt");
+        String prompt = this.secretsService.getSecret("LLM_summary_prompt");
         prompt = company.getMetrics().toString() + "\n" + prompt;
 
         String response = callOpenAIAPI(prompt, company.getIndustry());
         return new Analysis(company.getId(), response);
-    }
-
-    private String getResource(String file) {
-        String resource = "";
-        try {
-            Path resourcePath = Paths.get(
-                    this.getClass().getClassLoader().getResource(file).toURI()
-            );
-
-            resource = Files.readString(resourcePath);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return resource;
     }
 
     private String callOpenAIAPI(String prompt, String industry) {
