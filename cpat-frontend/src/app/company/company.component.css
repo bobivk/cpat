@@ -74,7 +74,7 @@ button:hover {
   color: #006400;
 }
 
-.save-btn, .analyze-btn {
+.save-btn, .analyze-btn .questions-btn {
   float: right;
   margin: 10px 0;
   background-color: #006400;
@@ -136,10 +136,11 @@ button:hover {
   display: flex;
   justify-content: flex-end;
   margin-top: 20px;
+  margin-left: 5px;
 }
 
-.action-buttons .save-btn, .action-buttons .analyze-btn {
-  background-color: #007bff;
+.action-buttons .save-btn, .action-buttons .analyze-btn, .action-buttons .questions-btn {
+  background-color: #4caf50;
   color: white;
   border: none;
   padding: 10px 15px;
@@ -149,8 +150,8 @@ button:hover {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.action-buttons .save-btn:hover, .action-buttons .analyze-btn:hover {
-  background-color: #0056b3;
+.action-buttons .save-btn:hover .action-buttons .analyze-btn:hover .questions-btn:hover {
+  background-color: #45a049;
 }
 
 .validation-popup {

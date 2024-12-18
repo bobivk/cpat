@@ -1,11 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import {FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule} from '@angular/forms';
+import {NgForOf, NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-company',
   templateUrl: './company.component.html',
   styleUrls: ['./company.component.css'],
   standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    NgForOf,
+    NgIf
+  ]
 })
 export class CompanyComponent implements OnInit {
   companyForm: FormGroup;
