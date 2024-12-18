@@ -3,6 +3,8 @@ package com.fast.cpat.service;
 import com.fast.cpat.model.Analysis;
 import com.fast.cpat.model.Company;
 import com.fast.cpat.repository.CompanyRepository;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -74,16 +76,17 @@ public class CompanyServiceImpl implements CompanyService {
         String model = this.secretsService.getSecret("model");
 
         String requestBodyJson = String.format("""
-            {
-              "model": "%s",
-              "messages": [
-                {"role": "system", "content": "%s"},
-                {"role": "user", "content": "%s"}
-              ],
-              "temperature": 0.7
-            }
-            """, model, LLM_CONTEXT + industry, prompt + industry);
+        {
+          "model": "%s",
+          "messages": [
+            {"role": "system", "content": "%s"},
+            {"role": "user", "content": "%s"}
+          ],
+          "temperature": 0.7
+        }
+        """, model, LLM_CONTEXT + industry, prompt + industry);
         System.out.println("Request body: " + requestBodyJson);
+
         Request request = new Request.Builder()
                 .url(API_URL)
                 .addHeader("Authorization", "Bearer " + openAIAPIKey)
@@ -92,10 +95,30 @@ public class CompanyServiceImpl implements CompanyService {
                 .build();
 
         try (Response response = okHttpClient.newCall(request).execute()) {
-            if (response.isSuccessful()) {
-                return response.body().string();
+            if (response.isSuccessful() && response.body() != null) {
+                String responseBody = response.body().string();
+
+                // Parse JSON response
+                ObjectMapper objectMapper = new ObjectMapper();
+                JsonNode rootNode = objectMapper.readTree(responseBody);
+
+                // Extract the "content" field inside "message"
+                JsonNode contentNode = rootNode
+                        .path("choices")
+                        .get(0)
+                        .path("message")
+                        .path("content");
+
+                // Return the cleaned HTML string
+                if (!contentNode.isMissingNode()) {
+                    String rawContent = contentNode.asText();
+                    return cleanHTML(rawContent);
+                } else {
+                    System.err.println("Error: 'content' field not found in response.");
+                    return "";
+                }
             } else {
-                System.err.println("Error: " + response.code() + " - " + response.body().string());
+                System.err.println("Error: " + response.code() + " - " + (response.body() != null ? response.body().string() : "No response body"));
                 return "";
             }
         } catch (Exception e) {
@@ -103,6 +126,17 @@ public class CompanyServiceImpl implements CompanyService {
             return "";
         }
     }
+
+    // Helper method to clean HTML content
+    private String cleanHTML(String rawContent) {
+        // Remove code block markers and escape characters
+        return rawContent
+                .replaceAll("```html", "")  // Remove opening code block
+                .replaceAll("```", "")     // Remove closing code block
+                .replace("\\n", "")        // Remove escaped newlines
+                .replace("\\", "");        // Unescape other characters
+    }
+
 
     public void deleteCompany(Long companyId) {
         checkCompanyExists(companyId);
