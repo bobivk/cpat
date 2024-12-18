@@ -65,7 +65,7 @@ public class CompanyServiceImpl implements CompanyService {
         checkCompanyExists(company.getId());
 
         String prompt = this.secretsService.getSecret("LLM_summary_prompt");
-        prompt = company.getMetrics().toString() + "\n" + prompt;
+        prompt = company.getMetrics().toString() + " " + prompt;
 
         String response = callOpenAIAPI(prompt, company.getIndustry());
         return new Analysis(company.getId(), response);
@@ -84,7 +84,7 @@ public class CompanyServiceImpl implements CompanyService {
           ],
           "temperature": 0.7
         }
-        """, model, LLM_CONTEXT + industry, prompt + industry);
+        """, model, LLM_CONTEXT + " " + industry, prompt + " " + industry);
         System.out.println("Request body: " + requestBodyJson);
 
         Request request = new Request.Builder()
