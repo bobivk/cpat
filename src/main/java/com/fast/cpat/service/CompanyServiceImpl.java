@@ -70,22 +70,23 @@ public class CompanyServiceImpl implements CompanyService {
     }
 
     private String callOpenAIAPI(String prompt, String industry) {
-        String openApiKey = this.secretsService.getSecret("openapi_key");
+        String openAIAPIKey = this.secretsService.getSecret("openapi_key");
+        String model = this.secretsService.getSecret("model");
 
         String requestBodyJson = String.format("""
             {
-              "model": "gpt-4o-mini",
+              "model": "%s",
               "messages": [
                 {"role": "system", "content": "%s"},
                 {"role": "user", "content": "%s"}
               ],
               "temperature": 0.7
             }
-            """, LLM_CONTEXT + industry, prompt + industry);
+            """, model, LLM_CONTEXT + industry, prompt + industry);
         System.out.println("Request body: " + requestBodyJson);
         Request request = new Request.Builder()
                 .url(API_URL)
-                .addHeader("Authorization", "Bearer " + openApiKey)
+                .addHeader("Authorization", "Bearer " + openAIAPIKey)
                 .addHeader("Content-Type", "application/json")
                 .post(RequestBody.create(requestBodyJson, MediaType.get("application/json")))
                 .build();
