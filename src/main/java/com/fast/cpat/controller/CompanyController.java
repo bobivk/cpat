@@ -43,19 +43,19 @@ public class CompanyController {
         return ResponseEntity.ok(company);
     }
 
-    @PostMapping("/company/{companyId}")
-    public ResponseEntity<Company> updateCompany(@PathVariable Long companyId, @RequestBody Company company) {
-        Company updatedCompany = companyService.updateCompany(companyId, company);
+    @PostMapping("/company/update")
+    public ResponseEntity<Company> updateCompany(@RequestBody Company company) {
+        Company updatedCompany = companyService.updateCompany(company.getId(), company);
         return ResponseEntity.ok(updatedCompany);
     }
 
-    @GetMapping("/analysis/{companyId}")
+    @GetMapping("/analysis")
     public ResponseEntity<Analysis> analyzeCompany(@RequestBody Company company) {
         Analysis analysis = companyService.getSummary(company);
         return ResponseEntity.ok(analysis);
     }
 
-    @GetMapping("/questions/{companyId}")
+    @GetMapping("/questions")
     public ResponseEntity<Analysis> getCompanyQuestions(@RequestBody Company company) {
         Analysis analysis = companyService.getQuestions(company);
         return ResponseEntity.ok(analysis);
