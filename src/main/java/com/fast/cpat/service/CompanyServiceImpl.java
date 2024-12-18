@@ -82,7 +82,7 @@ public class CompanyServiceImpl implements CompanyService {
               "temperature": 0.7
             }
             """, LLM_CONTEXT + industry, prompt + industry);
-
+        System.out.println("Request body: " + requestBodyJson);
         Request request = new Request.Builder()
                 .url(API_URL)
                 .addHeader("Authorization", "Bearer " + openApiKey)
