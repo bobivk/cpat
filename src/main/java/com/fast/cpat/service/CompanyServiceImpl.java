@@ -131,9 +131,10 @@ public class CompanyServiceImpl implements CompanyService {
     private String cleanHTML(String rawContent) {
         // Remove code block markers and escape characters
         return rawContent
-                .replaceAll("```html", "")  // Remove opening code block
+                .replaceAll("```html", "") // Remove opening code block
                 .replaceAll("```", "")     // Remove closing code block
                 .replace("\\n", "")        // Remove escaped newlines
+                .replace("\n", "")         // Remove unescaped newlines
                 .replace("\\", "");        // Unescape other characters
     }
 
