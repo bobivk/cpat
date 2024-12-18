@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 public class CompanyController {
@@ -24,6 +26,18 @@ public class CompanyController {
     public ResponseEntity<Company> saveCompany(@RequestBody Company company) {
         Company savedCompany = companyService.saveCompany(company);
         return ResponseEntity.ok(savedCompany);
+    }
+
+    @GetMapping("/company/all")
+    public ResponseEntity<List<Company>> findAll() {
+        List<Company> companies = companyService.findAll();
+        return ResponseEntity.ok(companies);
+    }
+
+    @GetMapping("/company/{companyId}")
+    public ResponseEntity<Company> findById(@PathVariable Long companyId) {
+        Company company = companyService.findById(companyId);
+        return ResponseEntity.ok(company);
     }
 
     @PostMapping("/company/{companyId}")

@@ -1,0 +1,66 @@
+<div class="company-form-container">
+  <h1>Create a Company</h1>
+  <form [formGroup]="companyForm" (ngSubmit)="saveCompany()">
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input
+        id="name"
+        formControlName="name"
+        type="text"
+        class="form-control"
+        placeholder="Name of the company"
+      />
+      <label for="industry">Industry:</label>
+      <input
+        id="industry"
+        formControlName="industry"
+        type="text"
+        class="form-control"
+        placeholder="Enter industry (e.g., Technology)"
+      />
+    </div>
+
+    <h2>Metrics</h2>
+    <table class="metrics-table" formArrayName="metrics">
+      <thead>
+      <tr>
+        <th>Metric Name</th>
+        <th>Metric Value</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let metric of metrics.controls; let i = index" [formGroupName]="i">
+        <td>
+          <input
+            formControlName="name"
+            placeholder="Metric name (e.g., Revenue)"
+            class="editable-input"
+          />
+        </td>
+        <td>
+          <input
+            formControlName="value"
+            placeholder="Metric value (e.g., $100K)"
+            class="editable-input"
+          />
+        </td>
+        <td>
+          <button class="icon-btn" (click)="removeMetric(i)">
+            <i class="material-icons">delete</i>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <button class="add-btn" type="button" (click)="addMetric()">Add Metric</button>
+  </form>
+
+  <div class="action-buttons">
+    <button class="save-btn" type="button" (click)="saveCompany()">Save</button>
+    <button class="analyze-btn" type="button" (click)="analyzeCompany()">Analyze</button>
+  </div>
+  <div *ngIf="validationError" class="validation-popup">
+    {{ validationError }}
+  </div>
+</div>
