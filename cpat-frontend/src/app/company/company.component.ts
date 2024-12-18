@@ -53,7 +53,7 @@ export class CompanyComponent implements OnInit {
 
   async fetchCompanies() {
     try {
-      const response = await fetch('http://localhost:8080/api/company/all');
+      const response = await fetch('http://52.59.206.208:8080/api/company/all');
       const data = await response.json();
       console.log('Fetched companies:', data);
     } catch (error) {
@@ -86,7 +86,7 @@ export class CompanyComponent implements OnInit {
     console.log('Saving company:', company);
 
     try {
-      const response = await fetch('http://localhost:8080/api/company', {
+      const response = await fetch('http://52.59.206.208:8080/api/company', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(company),
@@ -105,7 +105,7 @@ export class CompanyComponent implements OnInit {
     const requestBody = this.createRequestBody();
 
     try {
-      const response = await fetch('http://localhost:8080/api/analysis', {
+      const response = await fetch('http://52.59.206.208:8080/api/analysis', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),
@@ -122,7 +122,7 @@ export class CompanyComponent implements OnInit {
     const requestBody = this.createRequestBody();
 
     try {
-      const response = await fetch('http://localhost:8080/api/questions', {
+      const response = await fetch('http://52.59.206.208:8080/api/questions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),
