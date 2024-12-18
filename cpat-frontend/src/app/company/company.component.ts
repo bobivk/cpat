@@ -1,41 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, FormArray, Validators, ReactiveFormsModule} from '@angular/forms';
-import {NgForOf, NgIf} from '@angular/common';
-
-interface Metric {
-  name: string;
-  value: string;
-}
-
-interface Company {
-  id: number;
-  name: string;
-  industry: string;
-  metrics: Record<string, string>;
-  summary: string;
-}
-
-interface Analysis {
-  summary: string;
-  questions: string[];
-  companyId: number;
-}
+import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-company',
   templateUrl: './company.component.html',
   styleUrls: ['./company.component.css'],
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    NgForOf,
-    NgIf
-  ]
 })
 export class CompanyComponent implements OnInit {
   companyForm: FormGroup;
   validationError: string | null = null;
   companyId: number = 1;
+
+  summary: string | null = null;
+  questions: string | null = null;
 
   constructor(private fb: FormBuilder) {
     this.companyForm = this.fb.group({
@@ -55,7 +33,6 @@ export class CompanyComponent implements OnInit {
   }
 
   addMetric() {
-    // Add a new metric row with empty values
     this.metrics.push(
       this.fb.group({
         name: ['', Validators.required],
@@ -71,7 +48,7 @@ export class CompanyComponent implements OnInit {
   async fetchCompanies() {
     try {
       const response = await fetch('http://localhost:8080/api/company/all');
-      const data: Company[] = await response.json();
+      const data = await response.json();
       console.log('Fetched companies:', data);
     } catch (error) {
       console.error('Error fetching companies:', error);
@@ -84,16 +61,15 @@ export class CompanyComponent implements OnInit {
       return;
     }
 
-    // Convert metrics FormArray into an object
     const metricsObject = this.metrics.value.reduce(
-      (acc: Record<string, string>, metric: Metric) => {
+      (acc: Record<string, string>, metric: { name: string; value: string }) => {
         acc[metric.name.trim()] = metric.value.trim();
         return acc;
       },
       {}
     );
 
-    const company: Company = {
+    const company = {
       id: this.companyId,
       name: this.companyForm.value.name,
       industry: this.companyForm.value.industry,
@@ -112,31 +88,61 @@ export class CompanyComponent implements OnInit {
       const data = await response.json();
       console.log('Company saved:', data);
 
-      // Reset metrics after saving
       this.metrics.clear();
-      this.addMetric(); // Add a fresh empty row
+      this.addMetric();
     } catch (error) {
       console.error('Error saving company:', error);
     }
   }
 
-  async analyzeCompany() {
-    if (!this.companyId) {
-      this.showValidationError('No company ID provided.');
-      return;
-    }
-
-    const url = `http://localhost:8080/api/analyze/${this.companyId}`;
-    console.log('Fetching analysis:', url);
+  async fetchAnalysis() {
+    const requestBody = this.createRequestBody();
 
     try {
-      const response = await fetch(url);
-      const data: Analysis = await response.json();
+      const response = await fetch('http://localhost:8080/api/analysis', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+      });
+      const data = await response.text();
+      this.summary = data;
       console.log('Analysis result:', data);
-      alert(`Analysis Summary: ${data.summary}\nQuestions: ${data.questions.join('\n')}`);
     } catch (error) {
       console.error('Error fetching analysis:', error);
     }
+  }
+
+  async fetchQuestions() {
+    const requestBody = this.createRequestBody();
+
+    try {
+      const response = await fetch('http://localhost:8080/api/questions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody),
+      });
+      const data = await response.text();
+      this.questions = data;
+      console.log('Questions result:', data);
+    } catch (error) {
+      console.error('Error fetching questions:', error);
+    }
+  }
+
+  createRequestBody() {
+    const metricsObject = this.metrics.value.reduce(
+      (acc: Record<string, string>, metric: { name: string; value: string }) => {
+        acc[metric.name.trim()] = metric.value.trim();
+        return acc;
+      },
+      {}
+    );
+
+    return {
+      companyId: this.companyId,
+      industry: this.companyForm.value.industry,
+      metrics: metricsObject,
+    };
   }
 
   showValidationError(message: string | null) {

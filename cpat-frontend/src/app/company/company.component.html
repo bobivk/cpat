@@ -58,8 +58,16 @@
 
   <div class="action-buttons">
     <button class="save-btn" type="button" (click)="saveCompany()">Save</button>
-    <button class="analyze-btn" type="button" (click)="analyzeCompany()">Analyze</button>
+    <button class="analyze-btn" type="button" (click)="fetchAnalysis()">Analyze</button>
+    <button class="questions-btn" type="button" (click)="fetchQuestions()">Get Questions</button>
   </div>
+
+  <!-- Analysis Results -->
+  <div *ngIf="summary" [innerHTML]="summary" class="analysis-summary"></div>
+
+  <!-- Questions -->
+  <div *ngIf="questions" [innerHTML]="questions" class="analysis-questions"></div>
+
   <div *ngIf="validationError" class="validation-popup">
     {{ validationError }}
   </div>

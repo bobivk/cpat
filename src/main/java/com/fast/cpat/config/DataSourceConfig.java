@@ -1,6 +1,7 @@
 package com.fast.cpat.config;
 
 import com.fast.cpat.service.SecretsService;
+import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,5 +32,10 @@ class DataSourceConfig {
         dataSource.setPassword(this.secretsService.getSecret("db.password"));
 
         return dataSource;
+    }
+
+    @Bean
+    public OkHttpClient okHttpClient() {
+        return new OkHttpClient();
     }
 }

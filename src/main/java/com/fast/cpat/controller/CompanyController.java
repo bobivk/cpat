@@ -47,8 +47,14 @@ public class CompanyController {
     }
 
     @GetMapping("/analysis/{companyId}")
-    public ResponseEntity<Analysis> analyzeCompany(@PathVariable Long companyId) {
-        Analysis analysis = companyService.analyze(companyId);
+    public ResponseEntity<Analysis> analyzeCompany(@RequestBody Company company) {
+        Analysis analysis = companyService.getSummary(company);
+        return ResponseEntity.ok(analysis);
+    }
+
+    @GetMapping("/questions/{companyId}")
+    public ResponseEntity<Analysis> getCompanyQuestions(@RequestBody Company company) {
+        Analysis analysis = companyService.getQuestions(company);
         return ResponseEntity.ok(analysis);
     }
 

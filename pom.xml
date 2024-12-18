@@ -61,7 +61,13 @@
 			<scope>test</scope>
 		</dependency>
 
-<!--		AWS        -->
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>4.11.0</version>
+		</dependency>
+
+		<!--		AWS        -->
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>ssm</artifactId>

@@ -11,5 +11,6 @@ public interface CompanyService {
     Company saveCompany(Company company);
     Company updateCompany(Long companyId, Company company);
     void deleteCompany(Long companyId);
-    Analysis analyze(Long companyId);
+    Analysis getQuestions(Company company);
+    Analysis getSummary(Company company);
 }

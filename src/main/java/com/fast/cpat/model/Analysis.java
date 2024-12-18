@@ -1,9 +1,11 @@
 package com.fast.cpat.model;
 
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
+@Data
+@AllArgsConstructor
 public class Analysis {
-    private String companyId;
-    private List<String> questions;
-    private String summary;
+    private Long companyId;
+    private String analysis;
 }
